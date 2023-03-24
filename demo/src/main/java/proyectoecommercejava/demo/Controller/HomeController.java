@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -260,6 +261,24 @@ public class HomeController {
 
         //Redirecciona a la raiz de la pagina principal
         return "redirect:/";
+    }
+
+    //Nombre de la url orden dellocalhost
+    @PostMapping("/search")
+    //Método para buscar producto y pasa como argumento un parametro solicitado de tipo cadena
+    //y el modelo
+    public String searchProduct(@RequestParam String nombre, Model model){
+        //Crea un mensaje por consola y le pasa el parametro nombre 
+        log.info("Nombre del producto: {}", nombre);
+        //Se crea una lista de productos donde encuentre toda la info y sera transmitido el filtro  
+        //del nombre del producto que recolecte esa lista de producto
+        List<Producto> productos = productoService.findAll().stream().filter(p->p.getNombre().contains(nombre)).collect(Collectors.toList());
+        //Le pasa el atributo del modelo con la variable de la cadena llamada productos y el nombre
+        //del atributo llamada productos
+        model.addAttribute("productos", productos);
+
+        //Redireccione al home del usuario
+        return "usuario/home";
     }
     
 }
