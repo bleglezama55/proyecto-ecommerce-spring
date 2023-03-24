@@ -1,6 +1,6 @@
 package proyectoecommercejava.demo.model;
 
-import java.sql.Date;
+import java.util.Date;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -65,7 +65,7 @@ public class Orden {
         return fechaCreacion;
     }
 
-    public void setFechaCreacion(Date fechaCreacion) {
+    public void setFechaCreacion(java.util.Date fechaCreacion) {
         this.fechaCreacion = fechaCreacion;
     }
 

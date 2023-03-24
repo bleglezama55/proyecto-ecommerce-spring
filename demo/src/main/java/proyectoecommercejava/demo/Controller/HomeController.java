@@ -3,6 +3,7 @@ package proyectoecommercejava.demo.Controller;
 
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,6 +22,8 @@ import proyectoecommercejava.demo.model.DetalleOrden;
 import proyectoecommercejava.demo.model.Orden;
 import proyectoecommercejava.demo.model.Producto;
 import proyectoecommercejava.demo.model.Usuario;
+import proyectoecommercejava.demo.service.IDetalleOrdenService;
+import proyectoecommercejava.demo.service.IOrdenService;
 import proyectoecommercejava.demo.service.IUsuarioService;
 import proyectoecommercejava.demo.service.ProductoService;
 
@@ -44,6 +47,16 @@ public class HomeController {
     @Autowired
     //Objeto IUsuarioService para extraer info del usuario
     private IUsuarioService usuarioService;
+
+    //Inyección que indica el contenedor framework una instancia de la clase
+    @Autowired
+    //Objeto IOrdenService para extraer info de la orden
+    private IOrdenService ordenService;
+
+    //Inyección que indica el contenedor framework una instancia de la clase
+    @Autowired
+    //Objeto IDetalleOrdenService para extraer info del detalle de orden
+    private IDetalleOrdenService detalleOrdenService;
 
     //Para alamacenar los detalles de la orden
     List<DetalleOrden> detalles = new ArrayList<DetalleOrden>();
@@ -211,6 +224,42 @@ public class HomeController {
         model.addAttribute("usuario", usuario);
         //Redirección a la pagina resumen orden
         return "usuario/resumenorden";
+    }
+
+    //Nombre de la url orden dellocalhost
+    @GetMapping("/saveOrder")
+    //método para guardar la orden de la compra
+    public String saveOrder(){
+        //Objeto de tipo fecha
+        Date fechaCreacion = new Date();
+        //le pasa la fecha de cracion recibida
+        orden.setFechaCreacion(fechaCreacion);
+        //le pasa el numero de orden generada por orden service
+        orden.setNumero(ordenService.generarNumeroOrden());
+
+        //Nota: Usuario que va hacer referencia a esa orden
+        //Le pasamos de manera estatica el id usuarioService al objeto usuario
+        Usuario usuario = usuarioService.findById(1).get();
+        //Le pasa el usuario que se obtuvo 
+        orden.setUsuario(usuario);
+        //Le pasa la orden al metodo de la interface de guardar orden
+        ordenService.save(orden);
+
+        //Nota: Guardar Detalles
+        //Crea un bucle de detalle de orden
+        for(DetalleOrden dt:detalles){
+            //le pasa la orden de los detalles
+            dt.setOrden(orden);
+            //Le pasa el datalle de la orden al metodo de la interface de guardar detalles
+            detalleOrdenService.save(dt);
+        }
+        
+        //Limpiar lista y Orden
+        orden = new Orden();
+        detalles.clear();
+
+        //Redirecciona a la raiz de la pagina principal
+        return "redirect:/";
     }
     
 }

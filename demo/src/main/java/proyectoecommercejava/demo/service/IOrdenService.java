@@ -15,5 +15,8 @@ public interface IOrdenService {
 
     //Método de la interface de tipo orden llamada save
     Orden save (Orden orden);
+
+    //Método de la interface para generar numero de orden
+    String generarNumeroOrden();
     
 }
