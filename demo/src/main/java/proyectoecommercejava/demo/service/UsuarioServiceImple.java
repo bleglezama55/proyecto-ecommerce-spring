@@ -21,5 +21,11 @@ public class UsuarioServiceImple implements IUsuarioService{
         return usuarioRepository.findById(id);
     }
 
+    @Override
+    public Usuario save(Usuario usuario) {
+        // Devuelve al método guardar usuario de la interfaz
+        return usuarioRepository.save(usuario);
+    }
+
     
 }

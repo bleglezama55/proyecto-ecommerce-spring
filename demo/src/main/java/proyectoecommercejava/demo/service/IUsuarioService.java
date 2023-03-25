@@ -11,5 +11,7 @@ import proyectoecommercejava.demo.model.Usuario;
 public interface IUsuarioService {
     //Definimos el método que va a permitir obtener un usuario de la BD desde el parametro Id
     Optional<Usuario> findById(Integer id);
+    //Definimos el método que va a permitir guardar al usuario
+    Usuario save (Usuario usuario);
     
 }
