@@ -13,5 +13,7 @@ public interface IUsuarioService {
     Optional<Usuario> findById(Integer id);
     //Definimos el método que va a permitir guardar al usuario
     Usuario save (Usuario usuario);
+    //Mètodo de tipo opcional para encontrar la info del usuario desde el email
+    Optional<Usuario> findByEmail(String email);
     
 }
