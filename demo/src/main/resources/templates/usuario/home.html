@@ -22,8 +22,19 @@
 <body>
 
   <!-- Navigation -->
-  <div th:include="usuario/template_usuario.html::header">
 
+  <!-- Header cuando el usuario no esta logeado -->
+  <!-- Si la sesión esta vacio-->
+  <!-- sesion: es el nombre del atributo llamada sesion y esta declarada en el metodo vista home
+  en la clase HomeController -->
+  <div th:include="usuario/template_usuario.html::header" th:if="${sesion==null}">
+  </div>
+
+  <!-- Header cuando el usuario esta logeado -->
+  <!-- A menos que la sesión no este vacio-->
+  <!-- sesion: es el nombre del atributo llamada sesion y esta declarada en el metodo vista home
+  en la clase HomeController -->
+  <div th:include="usuario/template_usuario.html::header-user" th:unless="${sesion==null}">
   </div>
 
     <!-- Page Content -->

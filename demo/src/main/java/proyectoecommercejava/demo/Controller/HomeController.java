@@ -75,6 +75,9 @@ public class HomeController {
         log.info("Sesión del usuario: {}", session.getAttribute("idusuario"));
         //el objeto model obtendra el nombre del atributo y el objeto de los productos
         model.addAttribute("productos", productoService.findAll());
+
+        //Obtenemos el id de usuario de la sessión de la home
+        model.addAttribute("sesion", session.getAttribute("idusuario"));
         
         return "usuario/home";
     }
@@ -203,12 +206,16 @@ public class HomeController {
 
     //Nombre de la url getCart dellocalhost 
     @GetMapping("/getCart")
-    public String getCart(Model model){
+    public String getCart(Model model, HttpSession session){
         //Generamos un atributo del modelo el nombre del atributo y el objeto de la lista detalles
         //ya que los datalles se encuentran los productos que va añadiendo el usuario 
         model.addAttribute("cart", detalles);
         //Le pasamos el objeto de la orden por el cual solo se mostrara el campo total
         model.addAttribute("orden", orden);
+
+        //Obtenemos el id de la sesión
+        model.addAttribute("sesion", session.getAttribute("idusuario"));
+
         //Redirección a la pagina carrito
         return "/usuario/carrito";
     }
