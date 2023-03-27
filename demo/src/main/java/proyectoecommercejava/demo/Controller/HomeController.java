@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import jakarta.servlet.http.HttpSession;
 import proyectoecommercejava.demo.model.DetalleOrden;
 import proyectoecommercejava.demo.model.Orden;
 import proyectoecommercejava.demo.model.Producto;
@@ -68,8 +69,10 @@ public class HomeController {
     //Redirección para el localhost 8085 hacia a la home
     @GetMapping("")
     //Parametro model para que nos lleve la info de los productos hacia la vista
-    public String Home(Model model){
-
+    //HttpSession: Sesion de logeo al usuario para tener autenticaciòn del acceso a la pagina
+    public String Home(Model model, HttpSession session){
+        //Imprimimos por consola el atributo de la sessión que fue llamada idusuario en la cadena
+        log.info("Sesión del usuario: {}", session.getAttribute("idusuario"));
         //el objeto model obtendra el nombre del atributo y el objeto de los productos
         model.addAttribute("productos", productoService.findAll());
         
@@ -213,9 +216,10 @@ public class HomeController {
      //Nombre de la url orden dellocalhost
     @GetMapping("/order")
     //método para ver el resumen de la orden de la compra
-    public String order(Model model){
-        //Le pasamos de manera estatica el id usuarioService al objeto usuario
-        Usuario usuario = usuarioService.findById(1).get();
+    //HttpSession: Sesion de logeo al usuario para tener autenticaciòn del acceso a la pagina 
+    public String order(Model model, HttpSession session){
+        //Le pasamos el id de la sessión desde usuarioService al objeto usuario
+        Usuario usuario = usuarioService.findById( Integer.parseInt(session.getAttribute("idusuario").toString())).get();
         //Generamos un atributo del modelo el nombre del atributo y el objeto de la lista detalles
         //ya que los datalles se encuentran los productos que va añadiendo el usuario 
         model.addAttribute("cart", detalles);
@@ -230,7 +234,8 @@ public class HomeController {
     //Nombre de la url orden dellocalhost
     @GetMapping("/saveOrder")
     //método para guardar la orden de la compra
-    public String saveOrder(){
+    //HttpSession: Sesion de logeo al usuario para tener autenticaciòn del acceso a la pagina 
+    public String saveOrder(HttpSession session){
         //Objeto de tipo fecha
         Date fechaCreacion = new Date();
         //le pasa la fecha de cracion recibida
@@ -239,8 +244,8 @@ public class HomeController {
         orden.setNumero(ordenService.generarNumeroOrden());
 
         //Nota: Usuario que va hacer referencia a esa orden
-        //Le pasamos de manera estatica el id usuarioService al objeto usuario
-        Usuario usuario = usuarioService.findById(1).get();
+        //Le pasamos el id de la sessión desde usuarioService al objeto usuario
+        Usuario usuario = usuarioService.findById( Integer.parseInt(session.getAttribute("idusuario").toString())).get();
         //Le pasa el usuario que se obtuvo 
         orden.setUsuario(usuario);
         //Le pasa la orden al metodo de la interface de guardar orden

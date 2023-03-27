@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import jakarta.servlet.http.HttpSession;
 import proyectoecommercejava.demo.model.Producto;
 import proyectoecommercejava.demo.model.Usuario;
+import proyectoecommercejava.demo.service.IUsuarioService;
 import proyectoecommercejava.demo.service.ProductoService;
 import proyectoecommercejava.demo.service.UploadFileService;
 
@@ -36,6 +38,14 @@ public class ProductoController {
     @Autowired
     //Variable de objeto de la clase ProductoService para acceder a todos los métodos de esa clase
     private ProductoService productoService;
+
+    // anotación que permite inyectar unas dependencias con otras dentro de Spring
+    //como una mega factoria de objetos. Cada clase se registra para instanciar objetos con 
+    //alguna de las anotaciones @Controller ,@Service ,@repository o @RestController.
+    @Autowired
+    //Objeto de IUsuarioService para acceder a todos los métodos de esa clase
+    private IUsuarioService usuarioService;
+
     // anotación que permite inyectar unas dependencias con otras dentro de Spring
     //como una mega factoria de objetos. Cada clase se registra para instanciar objetos con 
     //alguna de las anotaciones @Controller ,@Service ,@repository o @RestController.
@@ -65,11 +75,13 @@ public class ProductoController {
     //Pasamos por parametro objecto producto
     @PostMapping("/save")
     //RequestParam: es un parametro en cual le pasamos el nombre del id de la imagen del input html
-    public String save(Producto producto, @RequestParam("img") MultipartFile file) throws IOException {
+    //HttpSession: Sesion de logeo al usuario para tener autenticaciòn del acceso a la pagina
+    public String save(Producto producto, @RequestParam("img") MultipartFile file, HttpSession session) throws IOException {
         //Mensaje por consola
         LOGGER.info("Este es el producto {}",producto);
-        //Va a crear un objeto usuario para darle valor al id del usuario y lo demas en vacio
-        Usuario User = new Usuario(1,"","","","","","","");
+        //Va a crear un objeto usuario para darle valor al id de la sessión del usuario 
+        //Usuario User = new Usuario(1,"","","","","","","");
+        Usuario User = usuarioService.findById(Integer.parseInt(session.getAttribute("idusuario").toString())).get();
         //Va colocar ese objeto usuario para que el producto sea creado 
         producto.setUsuario(User);
         //Imagen
