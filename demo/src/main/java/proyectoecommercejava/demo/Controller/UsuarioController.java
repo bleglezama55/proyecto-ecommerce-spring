@@ -134,5 +134,16 @@ public class UsuarioController{
         return "usuario/detallecompra";
     }
 
+    //nombre del url localhost llamada cerrar
+    @GetMapping("/cerrar")
+    //método para cerrar la sesión 
+    public String CerrarSesion(HttpSession session){
+        //Removemos el atributo llamada idusuario para que desaparezca la sesión
+        session.removeAttribute("idusuario");
+
+        //Redireccionamos a la pagina principal
+        return "redirect:/";
+    }
+
 
 }
