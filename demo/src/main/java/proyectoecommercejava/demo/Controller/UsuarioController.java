@@ -1,5 +1,6 @@
 package proyectoecommercejava.demo.Controller;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -12,7 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import jakarta.servlet.http.HttpSession;
+import proyectoecommercejava.demo.model.Orden;
 import proyectoecommercejava.demo.model.Usuario;
+import proyectoecommercejava.demo.service.IOrdenService;
 import proyectoecommercejava.demo.service.IUsuarioService;
 
 //Cognotación del controller para que spring lo reconozca
@@ -28,6 +31,11 @@ public class UsuarioController{
     @Autowired
     //Objeto IUsuarioService para accerder a la info
     private IUsuarioService usuarioService;
+
+    //Inyección que indica el contenedor framework una instancia de la clase
+    @Autowired
+    //
+    private IOrdenService ordenService;
 
     //nombre del url localhost usuario/registro
     @GetMapping("/registro")
@@ -93,6 +101,16 @@ public class UsuarioController{
     public String obtenerCompras(Model model, HttpSession session){
         //Le pasamos el atributo del modelo llamada sesion y tambien le pasamos la sesion del id usuario
         model.addAttribute("sesion", session.getAttribute("idusuario"));
+
+        //objeto usuario almacena el método del id de la session  
+        Usuario usuario = usuarioService.findById(Integer.parseInt(session.getAttribute("idusuario").toString())).get();
+
+        //Se crea lista de ordenes que va a almacenar la orden del servicio pasando la session del 
+        //id usuario
+        List<Orden> ordenes = ordenService.findByUsuario(usuario); 
+
+        //atributo del modelo llamado ordenes y le pasa las ordenes
+        model.addAttribute("ordenes", ordenes);
         return "usuario/compras";
     }
 

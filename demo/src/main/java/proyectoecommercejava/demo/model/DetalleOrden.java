@@ -5,7 +5,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 //Creamos la tabla llamada datalles
@@ -22,7 +21,7 @@ public class DetalleOrden {
     private double total;
 
     //Relación uno a uno
-    @OneToOne
+    @ManyToOne
     //campo tipo Orden
     private Orden orden;
 

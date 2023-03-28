@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import proyectoecommercejava.demo.model.Orden;
+import proyectoecommercejava.demo.model.Usuario;
 import proyectoecommercejava.demo.repository.IOrdenRepository;
 
 //Inyección del service para que lo reconosca el spring
@@ -75,6 +76,12 @@ public class OrdenServiceImple implements IOrdenService{
         }
 
         return numeroConcatenado;
+    }
+
+    @Override
+    public List<Orden> findByUsuario(Usuario usuario) {
+        // devuelve el método de a interfaz de la lista de ordenes del usuario
+        return ordenRepository.findByUsuario(usuario);
     }
     
 }
