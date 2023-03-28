@@ -1,6 +1,7 @@
 package proyectoecommercejava.demo.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,9 @@ public interface IOrdenService {
 
     //Método de la interface que nos permite obtener una lista ordenes
     List<Orden> findAll();
+
+    //Método de la interface que nos permite obtener el id de la orden
+    Optional<Orden> findById (Integer id);
 
     //Método de la interface de tipo orden llamada save
     Orden save (Orden orden);

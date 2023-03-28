@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -112,6 +113,25 @@ public class UsuarioController{
         //atributo del modelo llamado ordenes y le pasa las ordenes
         model.addAttribute("ordenes", ordenes);
         return "usuario/compras";
+    }
+
+    //nombre del url localhost y va indicar el id de la orden y cuales detalles indica esa orden
+    //PathVariable: Nos permite mapear el argumento que vienen en la url
+    //HttpSession: Sesion de logeo al usuario para tener autenticaciòn del acceso a la pagina
+    //Model: Nos permite traer un atributo del objeto espcificado
+    @GetMapping("/detalle/{id}")
+    //Método de la vista detalle compra
+    public String detalleCompra(@PathVariable Integer id, HttpSession session, Model model){
+        //Imprimimos por consola el id de la orden
+        logger.info("Id de la orden: {}", id);
+        //Le pasamos el id de la orden a traves del metodo de la interfaz findById de ordenService
+        Optional<Orden> orden = ordenService.findById(id);
+        //le pasamos el atributo del modelo de la orden para que me obtenga esa orden los detalles
+        model.addAttribute("detalles", orden.get().getDetalle());
+        //Sesion del id del usuario
+        model.addAttribute("sesion", session.getAttribute("idusuario"));
+        //Devuelve la vista del detallecompra
+        return "usuario/detallecompra";
     }
 
 
